@@ -9,7 +9,7 @@ import shlex
 app = Tk()
 
 #window propery
-app.title('Test Suit')
+app.title('Test Suite v1.0')
 app.geometry('700x400')
 
 #create tabbed window
@@ -62,7 +62,6 @@ shutterText = Entry(cameraTestTab, textvariable = ssVal).grid(row=2, column=1)
 
 
 
-
 def onClickBtn():
     lbox.insert(1,"Stuck Address: ............OK")
     lbox.insert(2,"Random Value: ............OK")
@@ -110,17 +109,17 @@ def onClickBtnI2C():
     tbox2.place(x=20,y=70)
     tbox2.insert(END, out)
 
-def onClickBtnUART():
-    command = 'minicom -b 9600 -o -D /dev/ttyACM0'
-    process = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE)
-    while True:
-        output = process.stdout.readline()
-        if output == '' and process.poll() is not None:
-            break
-        if output:
-            print(output.strip())
-    rc = process.poll()
-    return rc
+#def onClickBtnUART():
+#     command = 'minicom -b 9600 -o -D /dev/ttyACM0'
+#     process = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE)
+#     while True:
+#         output = process.stdout.readline()
+#         if output == '' and process.poll() is not None:
+#             break
+#         if output:
+#             print(output.strip())
+#     rc = process.poll()
+#     return rc
 
 def onClickBtnCAMERA():
     x = xString.get()
@@ -130,6 +129,8 @@ def onClickBtnCAMERA():
     print(output)
     if output == 70:
         Label(cameraTestTab, text="exit code: 70: Camera not connected",bg="red").grid(row=5,column=0,padx=5)
+    if output == 0:
+        Label(cameraTestTab, text="exit code: 0: PASS",fg="green").grid(row=5,column=0,padx=5)
 
 def onClickBtnCAMERA1():
     ss = ssVal.get()
@@ -137,13 +138,17 @@ def onClickBtnCAMERA1():
     output = subprocess.call(command,shell=True)
     if output == 70:
         Label(cameraTestTab, text="exit code: 70: Camera not connected",bg="red").grid(row=5,column=0,padx=5)
+
+    if output == 0:
+        Label(cameraTestTab, text="exit code: 0: PASS",bg="green").grid(row=5,column=0,padx=5)
+        
     
 
 
 my_btn = Button(mTestTab, text="TEST",command = onClickBtn).grid(column = 1, row=0,padx = 20, pady = 30)
 spiBtn = Button(spiTestTab, text="TEST",command = onClickBtnSPI).grid(column = 1, row=0,padx = 20, pady = 10)
 i2cBtn = Button(i2cTestTab, text="TEST",command = onClickBtnI2C).grid(column = 1, row=0,padx = 20, pady = 30)
-uartBtn = Button(uartTestTab, text="TEST",command = onClickBtnUART).grid(column = 1, row=0,padx = 20, pady = 30)
+uartBtn = Button(uartTestTab, text="TEST").grid(column = 1, row=0,padx = 20, pady = 30)
 cameraBtn = Button(cameraTestTab, text="TEST",command = onClickBtnCAMERA).grid(column = 5, row=1,padx = 30, pady = 30)
 cameraBtn1 = Button(cameraTestTab, text="TEST Shutter Speed",command = onClickBtnCAMERA1).grid(column = 2, row=2,padx = 30, pady = 30)
 #start program
